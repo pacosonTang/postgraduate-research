@@ -15,12 +15,17 @@ public class Soccer {
 	
 	// 聚类个数
 	static int cluster = 3;
+	//数据维度
+	static int dimension = 3;
+	//数据项数
+	static int rowno = 15;
+	
 	// 质心数组（3 个3维）
-	static double[][] centroid = new double[3][3];
+	static double[][] centroid = new double[cluster][dimension];
 	// 球队数组
-	static String[] team = new String[15];
+	static String[] team = new String[rowno];
 	//数据项数组， 最后一列表示所属 类别
-	double[][] items_data = new double[15][cluster + 1];
+	double[][] items_data = new double[rowno][dimension + 1];
 			
 	public static void main(String[] args) {
 
@@ -33,10 +38,6 @@ public class Soccer {
 		//获得遍历行 的迭代器
 		Iterator<Row> itr = readIterator();
 		Row row = null;
-		
-		// 前3行数据，分配类别
-		for (int i = 0; i < cluster; i++) 
-			items_data[i][cluster] = i;
 		
 		int index = 0;//行索引
 		
@@ -70,8 +71,8 @@ public class Soccer {
 		
 		
 		//初始 分派 item
-		for (int i = 0; i < items_data.length; i++)  
-			items_data[i][cluster] = assignment(items_data[i]);
+		for (int i = 0; i < rowno; i++)  
+			items_data[i][dimension] = assignment(items_data[i]);
 		
 		printResult(1);
 		
@@ -86,8 +87,8 @@ public class Soccer {
 		setOtherCentroid();
 		
 		//2.指派分配 item(Assignment-指派分配过程)
-		for (int i = 0; i < items_data.length; i++)  
-			items_data[i][cluster] = assignment(items_data[i]);
+		for (int i = 0; i < rowno; i++)  
+			items_data[i][dimension] = assignment(items_data[i]);
 		//打印聚类结果
 		printResult(ith);
 	}
@@ -98,14 +99,14 @@ public class Soccer {
 		double sum = 0, minSum = 0;
 		int minimal = 0;
 		
-		for (int j = 0; j < 3; j++) {
+		for (int j = 0; j < dimension; j++) {
 			sum += Math.pow(item[j] - centroid[0][j], 2.0);
 		}
 		minSum = sum;
 		
-		for (int i = 1; i < 3; i++) {
+		for (int i = 1; i < cluster; i++) {
 			sum = 0;
-			for (int j = 0; j < 3; j++) {
+			for (int j = 0; j < dimension; j++) {
 				sum += Math.pow(item[j] - centroid[i][j], 2.0);
 			}
 			if(sum < minSum) {
@@ -124,7 +125,7 @@ public class Soccer {
 		
 		//重置质心数组
 		resetCentroid();
-		for (int i = 0; i < items_data.length; i++) {
+		for (int i = 0; i < rowno; i++) {
 			
 			temp = (int)items_data[i][3];
 			centroid[temp][0] += items_data[i][0];
@@ -149,7 +150,7 @@ public class Soccer {
 		for (int i = 0; i < cluster; i++) {
 			
 			System.out.print("分配到类" + (i+1) + " 的球队有： ");
-			for (int j = 0; j < items_data.length; j++) {
+			for (int j = 0; j < rowno; j++) {
 				
 				if(items_data[j][cluster] == i)
 					System.out.print(team[j] + "  ");
@@ -162,7 +163,7 @@ public class Soccer {
 	//将质心数组 重置为 0
 	public void resetCentroid(){
 		
-		for (int i = 0; i < centroid.length; i++) {
+		for (int i = 0; i < cluster; i++) {
 			centroid[i][0] = 0;
 			centroid[i][1] = 0;
 			centroid[i][2] = 0;
