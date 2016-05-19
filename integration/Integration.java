@@ -38,7 +38,7 @@ public class Integration {
 		Integration integration = new Integration();
 		double upper = 1.0;
 		double lower = 0.0;
-		int n = 50;
+		int n = 200; // splited into 200 subintervals.
 		// double realUpper = 0.03;
 		
 		double result = 
@@ -54,7 +54,7 @@ public class Integration {
 				});
 		result /= Math.pow(2*Math.PI, 0.5);
 		result = new BigDecimal(result).
-				setScale(4, RoundingMode.HALF_UP).doubleValue();
+				setScale(6, RoundingMode.HALF_UP).doubleValue(); // save 6 decimal places.
 		return result;
 	}
 }
